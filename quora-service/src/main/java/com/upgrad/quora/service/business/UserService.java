@@ -3,7 +3,6 @@ package com.upgrad.quora.service.business;
 import com.upgrad.quora.service.dao.UserRepository;
 import com.upgrad.quora.service.entity.User;
 import com.upgrad.quora.service.entity.UserAuth;
-import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -41,8 +40,8 @@ public class UserService {
 
 
         @Transactional(propagation = Propagation.REQUIRED)
-        public UserAuth getUserByToken(String authorization)  {
-          return userRepository.getUserByAuthToken(authorization);
+        public UserAuth getUserAuthByToken(String authorization)  {
+          return userRepository.getUserAuthByAuthToken(authorization);
 
         }
 
@@ -53,7 +52,7 @@ public class UserService {
         }
 
 
-        public User getUserById(String uuid) throws UserNotFoundException {
+        public User getUserById(String uuid)  {
             User user = userRepository.getUserById(uuid);
 
             return user;
@@ -61,7 +60,6 @@ public class UserService {
 
         @Transactional(propagation = Propagation.REQUIRED)
         public void deleteUser(Integer id) {
-            //User merge = userRepository.updateUser(user);
             userRepository.deleteUser(id);
         }
     }

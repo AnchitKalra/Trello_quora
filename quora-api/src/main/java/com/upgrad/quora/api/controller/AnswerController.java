@@ -34,14 +34,14 @@ public class AnswerController {
     AnswerService answerService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/question/{questionId}/answer/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable(name = "questionId") String quuid, @RequestParam(name = "authorization")
+    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable(name = "questionId") String quuid, @RequestHeader(name = "authorization")
             String authorization, AnswerRequest answerRequest) throws InvalidQuestionException, AuthorizationFailedException {
         Question question = questionService.getQuestionById(quuid);
         if(question == null) {
             throw new InvalidQuestionException("QUES-001", "The question entered is invalid");
         }
 
-        UserAuth userAuth = userService.getUserByToken(authorization);
+        UserAuth userAuth = userService.getUserAuthByToken(authorization);
         if(userAuth == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -71,9 +71,9 @@ public class AnswerController {
 
     @RequestMapping(method = RequestMethod.PUT, value =  "/answer/edit/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerEditResponse> editAnswerContent(@PathVariable(name = "answerId") String auuid,
-                                                                AnswerEditRequest answerEditRequest, @RequestParam(name = "authorization")
+                                                                AnswerEditRequest answerEditRequest, @RequestHeader(name = "authorization")
                                                                             String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
-        UserAuth userAuth = userService.getUserByToken(authorization);
+        UserAuth userAuth = userService.getUserAuthByToken(authorization);
         if(userAuth == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -105,9 +105,9 @@ public class AnswerController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable(name = "answerId") String auuid, @RequestParam(name = "authorization") String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable(name = "answerId") String auuid, @RequestHeader(name = "authorization") String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
-        UserAuth userAuth = userService.getUserByToken(authorization);
+        UserAuth userAuth = userService.getUserAuthByToken(authorization);
         if(userAuth == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }
@@ -140,8 +140,8 @@ public class AnswerController {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable(name = "questionId") String quuid, @RequestParam(name = "authorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException {
-        UserAuth userAuth = userService.getUserByToken(authorization);
+    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable(name = "questionId") String quuid, @RequestHeader(name = "authorization") String authorization) throws AuthorizationFailedException, InvalidQuestionException {
+        UserAuth userAuth = userService.getUserAuthByToken(authorization);
         if(userAuth == null) {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
         }

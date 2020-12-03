@@ -47,10 +47,10 @@ public class UserRepository {
         entityManager.persist(auth);
     }
 
-    public UserAuth getUserByAuthToken(String authorization) {
+    public UserAuth getUserAuthByAuthToken(String authorization) {
 
         try {
-            UserAuth userAuth = entityManager.createNamedQuery("getUserByToken", UserAuth.class).setParameter("token", authorization).getSingleResult();
+            UserAuth userAuth = entityManager.createNamedQuery("getUserAuthByToken", UserAuth.class).setParameter("token", authorization).getSingleResult();
             return userAuth;
         }
         catch (NoResultException noResultException) {
@@ -72,19 +72,13 @@ public class UserRepository {
         }
     }
 
-   /* public User updateUser(User user) {
-        User merge = entityManager.merge(user);
-        return merge;
-    }*/
 
     public void deleteUser(Integer id) {
         entityManager.flush();
         entityManager.clear();
         User user = entityManager.find(User.class, id);
-       // entityManager.getTransaction().begin();
 
         entityManager.remove(user);
-        //entityManager.getTransaction().commit();
     }
 
 }
